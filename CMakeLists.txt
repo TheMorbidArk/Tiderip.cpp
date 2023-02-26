@@ -1,8 +1,7 @@
-cmake_minimum_required(VERSION 3.24)
-project(Tiderip_cpp C CXX)
+cmake_minimum_required(VERSION 3.12)
+project(Tiderip_cpp CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 
 add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
@@ -33,4 +32,4 @@ message("-----[END_MESSAGES]-----\r\n")
 
 include_directories(Include VM Parser CLI Object Compiler)
 
-add_executable(Tiderip_cpp main.cpp ${SCR_SOUCES_LIST} ${SCR_HEADER_PATH})
+add_executable(Tiderip_cpp main.cpp ${SCR_HEADER_PATH} ${SCR_SOUCES_LIST})

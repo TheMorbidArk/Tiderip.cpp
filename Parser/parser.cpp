@@ -627,16 +627,27 @@ void parser::initParser(VM *vm, Parser *parser, const char *file, const char *so
     parser->sourceCode = sourceCode;
     parser->curChar = *parser->sourceCode;
     parser->nextCharPtr = parser->sourceCode + 1;
-    parser->curToken
-          .lineNo = 1;
-    parser->curToken
-          .type = TokenType::TOKEN_UNKNOWN;
-    parser->curToken
-          .start = nullptr;
-    parser->curToken
-          .length = 0;
+    parser->curToken.lineNo = 1;
+    parser->curToken.type = TokenType::TOKEN_UNKNOWN;
+    parser->curToken.start = nullptr;
+    parser->curToken.length = 0;
     parser->preToken = parser->curToken;
     parser->interpolationExpectRightParenNum = 0;
     parser->vm = vm;
+}
+
+parser::parser(VM *vm, const char *file, const char *sourceCode)
+{
+    this->file = file;
+    this->sourceCode = sourceCode;
+    this->curChar = *this->sourceCode;
+    this->nextCharPtr = this->sourceCode + 1;
+    this->curToken.lineNo = 1;
+    this->curToken.type = TokenType::TOKEN_UNKNOWN;
+    this->curToken.start = nullptr;
+    this->curToken.length = 0;
+    this->preToken = this->curToken;
+    this->interpolationExpectRightParenNum = 0;
+    this->vm = vm;
 }
 

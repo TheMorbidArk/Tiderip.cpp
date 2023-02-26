@@ -110,6 +110,7 @@ class parser
     parser *parent;  //指向父parser
     VM *vm;
     
+    parser(VM *vm, const char *file, const char *sourceCode);
     static char lookAheadChar(Parser *parser);
     static void getNextChar(Parser *parser);
     static void getNextToken(Parser *parser);

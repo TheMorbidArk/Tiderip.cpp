@@ -18,9 +18,15 @@ enum class mode
     runFileMode, runCliMode, helpMode
 };
 
+#include "ObjString.hpp"
+#include "vm.hpp"
+
 int main()
 {
-    Cli::runFileToken("tst");
+    VM *vm = new class vm();
+    auto *objString = new ObjString(vm, "123456", 6);
+    
+    cout << objString->value.start;
     return 0;
 }
 

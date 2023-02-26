@@ -8,12 +8,14 @@
 vm::vm()
 {
     this->allocatedBytes = 0;
+    this->allObjects = nullptr;
     this->curParser = nullptr;
 }
 
 void vm::initVM(VM *vm)
 {
     vm->allocatedBytes = 0;
+    vm->allObjects = nullptr;
     vm->curParser = nullptr;
 }
 

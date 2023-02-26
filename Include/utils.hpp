@@ -112,6 +112,8 @@ typedef uint8_t Byte;
 typedef char Char;
 typedef int Int;
 
+#define SymbolTable Buffer<String>
+
 typedef enum
 {
     ERROR_IO,

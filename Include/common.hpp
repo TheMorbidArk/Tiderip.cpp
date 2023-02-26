@@ -10,6 +10,7 @@
 
 typedef class vm VM;
 typedef class parser Parser;
+typedef class Class Class;
 
 #define UNUSED [[maybe_unused]]
 

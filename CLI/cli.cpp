@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <cstring>
 #include "cli.hpp"
 #include "utils.hpp"
 
@@ -48,11 +49,10 @@ void Cli::runFileToken(const char *path)
         cli::rootDir = root;
     }
     
-    VM *vm = vm::newVM();
+    VM *vm = new class vm();
     std::string sourceCode = readFile(path);
     
-    Parser parser;
-    parser::initParser(vm, &parser, path, sourceCode.c_str());
+    Parser parser(vm, path, sourceCode.c_str());
     cout << "SourceCode is :\n"
          << sourceCode.c_str()
          << "===SourceCode End===\n";
