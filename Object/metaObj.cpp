@@ -8,7 +8,17 @@
 
 ObjModule::ObjModule(VM *vm, const char *modName)
 {
-
+    // ObjModule是元信息对象,不属于任何一个类
+    this->objHeader = new headerObj(vm, ObjType::OT_MODULE, nullptr);
+    
+    Buffer<String>::BufferInit(&this->moduleVarName);
+    Buffer<Value>::BufferInit(&this->moduleVarValue);
+    
+    this->name = nullptr;   // 核心模块名为NULL
+    if (modName != nullptr)
+    {
+        this->name = new ObjString(vm, modName, strlen(modName));
+    }
 }
 ObjModule *ObjModule::newObjModule(VM *vm, const char *modName)
 {
@@ -34,7 +44,14 @@ ObjModule *ObjModule::newObjModule(VM *vm, const char *modName)
 }
 ObjInstance::ObjInstance(VM *vm, Class *tarClass)
 {
-
+//在此关联对象的类为参数class
+    this->objHeader = new headerObj(vm, ObjType::OT_INSTANCE, tarClass);
+    //初始化field为NULL
+    uint32_t idx = 0;
+    while (idx < tarClass->fieldNum)
+    {
+        this->fields[idx++] = ((Value){ ValueType::VT_NULL, { 0 }});
+    }
 }
 ObjInstance *ObjInstance::newObjInstance(VM *vm, Class *tarClass)
 {
@@ -47,7 +64,7 @@ ObjInstance *ObjInstance::newObjInstance(VM *vm, Class *tarClass)
     uint32_t idx = 0;
     while (idx < tarClass->fieldNum)
     {
-        objInstance->fields[idx++] = VT_TO_VALUE(ValueType::VT_NULL);
+        objInstance->fields[idx++] = ((Value){ ValueType::VT_NULL, { 0 }});
     }
     return objInstance;
 }

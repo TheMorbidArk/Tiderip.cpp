@@ -18,15 +18,20 @@ enum class mode
     runFileMode, runCliMode, helpMode
 };
 
-#include "ObjString.hpp"
+#include "metaObj.hpp"
 #include "vm.hpp"
 
 int main()
 {
     VM *vm = new class vm();
-    auto *objString = new ObjString(vm, "123456", 6);
+    ObjModule *objModule = new ObjModule(vm, "1234");
     
-    cout << objString->value.start;
+    ObjModule *objModule1 = ObjModule::newObjModule(vm, "123");
+    
+    cout << objModule->name->value.start
+         << endl
+         << objModule1->name->value.start;
+    
     return 0;
 }
 

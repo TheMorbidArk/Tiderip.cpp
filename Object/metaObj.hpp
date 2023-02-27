@@ -16,7 +16,7 @@ class ObjModule
     ObjString *name;   //模块名
     
     ObjModule(VM *vm, const char *modName);
-    ObjModule *newObjModule(VM *vm, const char *modName);
+    static ObjModule *newObjModule(VM *vm, const char *modName);
 };
 
 //对象实例
@@ -28,7 +28,7 @@ class ObjInstance
     Value fields[0];
     
     ObjInstance(VM *vm, Class *tarClass);
-    ObjInstance *newObjInstance(VM *vm, Class *tarClass);
+    static ObjInstance *newObjInstance(VM *vm, Class *tarClass);
 };
 
 
