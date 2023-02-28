@@ -2,9 +2,13 @@
 // Created by MorbidArk on 2023/2/25.
 //
 
+#include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <cctype>
 #include "parser.hpp"
+#include "unicodeUtf8.hpp"
+#include "ObjString.hpp"
 
 using namespace parserUtil;
 
@@ -298,6 +302,10 @@ static void parserUtil::parseString(Parser *parser)
             Buffer<Byte>::BufferAdd(parser->vm, &str, parser->curChar);
         }
     }
+    //用识别到的字符串新建字符串对象存储到curToken的value中
+    ObjString *objString = new ObjString(parser->vm, (const char *)str.datas, str.count);
+    
+    parser->curToken.value = OBJ_TO_VALUE(objString);
     
     Buffer<Byte>::BufferClear(parser->vm, &str);
 }
@@ -621,7 +629,7 @@ void parser::consumeNextToken(Parser *parser, TokenType expected, const char *er
     }
 }
 
-void parser::initParser(VM *vm, Parser *parser, const char *file, const char *sourceCode)
+void parser::initParser(VM *vm, Parser *parser, const char *file, const char *sourceCode, ObjModule *objModule)
 {
     parser->file = file;
     parser->sourceCode = sourceCode;
@@ -634,9 +642,10 @@ void parser::initParser(VM *vm, Parser *parser, const char *file, const char *so
     parser->preToken = parser->curToken;
     parser->interpolationExpectRightParenNum = 0;
     parser->vm = vm;
+    parser->curModule = objModule;
 }
 
-parser::parser(VM *vm, const char *file, const char *sourceCode)
+parser::parser(VM *vm, const char *file, const char *sourceCode, ObjModule *objModule)
 {
     this->file = file;
     this->sourceCode = sourceCode;
@@ -649,5 +658,6 @@ parser::parser(VM *vm, const char *file, const char *sourceCode)
     this->preToken = this->curToken;
     this->interpolationExpectRightParenNum = 0;
     this->vm = vm;
+    this->curModule = objModule;
 }
 

@@ -18,20 +18,9 @@ enum class mode
     runFileMode, runCliMode, helpMode
 };
 
-#include "metaObj.hpp"
-#include "vm.hpp"
-
 int main()
 {
-    VM *vm = new class vm();
-    ObjModule *objModule = new ObjModule(vm, "1234");
-    
-    ObjModule *objModule1 = ObjModule::newObjModule(vm, "123");
-    
-    cout << objModule->name->value.start
-         << endl
-         << objModule1->name->value.start;
-    
+    Cli::runFileToken("tst");
     return 0;
 }
 

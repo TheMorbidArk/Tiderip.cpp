@@ -52,7 +52,7 @@ void Cli::runFileToken(const char *path)
     VM *vm = new class vm();
     std::string sourceCode = readFile(path);
     
-    Parser parser(vm, path, sourceCode.c_str());
+    Parser parser(vm, path, sourceCode.c_str(), nullptr);
     cout << "SourceCode is :\n"
          << sourceCode.c_str()
          << "===SourceCode End===\n";

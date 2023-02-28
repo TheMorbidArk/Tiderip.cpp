@@ -4,7 +4,10 @@
 
 #pragma once
 
+#include <any>
 #include "headerObj.hpp"
+#include "ObjString.hpp"
+#include "ObjFn.hpp"
 
 enum class MethodType
 {
@@ -17,18 +20,23 @@ enum class MethodType
 #define VT_TO_VALUE(vt) \
    ((Value){vt, {0}})
 
-#define BOOL_TO_VALUE(boolean) (boolean ? VT_TO_VALUE(VT_TRUE) : VT_TO_VALUE(VT_FALSE))
+#define BOOL_TO_VALUE(boolean) (boolean ? VT_TO_VALUE(ValueType::VT_TRUE) : VT_TO_VALUE(ValueType::VT_FALSE))
 #define VALUE_TO_BOOL(value) ((value).type == VT_TRUE ? true : false)
 
-#define NUM_TO_VALUE(num) ((Value){VT_NUM, {num}})
+#define NUM_TO_VALUE(num) ((Value){ValueType::VT_NUM, {num}})
 #define VALUE_TO_NUM(value) value.num
 
-#define OBJ_TO_VALUE(objPtr) ({ \
-   Value value; \
-   value.type = VT_OBJ; \
-   value.objHeader = (ObjHeader*)(objPtr); \
-   value; \
-})
+#define OBJ_TO_VALUE(objPtr)  \
+   ObjToValue(objPtr)
+   
+   
+template<typename Type>
+Value ObjToValue(Type *objPtr){
+    Value value;
+    value.type = ValueType::VT_OBJ;
+    value.objHeader = (headerObj *)(objPtr);
+    return value;
+}
 
 #define VALUE_TO_OBJ(value) (value.objHeader)
 #define VALUE_TO_OBJSTR(value) ((ObjString*)VALUE_TO_OBJ(value))

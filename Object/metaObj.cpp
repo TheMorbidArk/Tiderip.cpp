@@ -37,7 +37,7 @@ ObjModule *ObjModule::newObjModule(VM *vm, const char *modName)
     objModule->name = nullptr;   // 核心模块名为NULL
     if (modName != nullptr)
     {
-        objModule->name = new ObjString(vm, modName, (uint32_t)strlen(modName));
+        objModule->name = new ObjString(vm, modName, strlen(modName));
     }
     
     return objModule;

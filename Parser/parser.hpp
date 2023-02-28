@@ -5,7 +5,7 @@
 #pragma once
 
 #include "common.hpp"
-#include "utils.hpp"
+#include "vm.hpp"
 
 enum class TokenType : int
 {
@@ -94,7 +94,7 @@ typedef struct
     const char *start;
     uint32_t length;
     uint32_t lineNo;
-    // Value value;
+    Value value;
 } Token;
 
 class parser
@@ -106,18 +106,19 @@ class parser
     char curChar;
     Token curToken;
     Token preToken;
+    ObjModule *curModule;    //当前正在编译的模块
     int interpolationExpectRightParenNum;       // 期望的右括号数量,用于跟踪小括号对儿的嵌套
     parser *parent;  //指向父parser
     VM *vm;
     
-    parser(VM *vm, const char *file, const char *sourceCode);
+    parser(VM *vm, const char *file, const char *sourceCode, ObjModule *objModule);
     static char lookAheadChar(Parser *parser);
     static void getNextChar(Parser *parser);
     static void getNextToken(Parser *parser);
     static bool matchToken(Parser *parser, TokenType expected);
     static void consumeCurToken(Parser *parser, TokenType expected, const char *errMsg);
     static void consumeNextToken(Parser *parser, TokenType expected, const char *errMsg);
-    static void initParser(VM *vm, Parser *parser, const char *file, const char *sourceCode);
+    static void initParser(VM *vm, Parser *parser, const char *file, const char *sourceCode, ObjModule *objModule);
     
 };
 
