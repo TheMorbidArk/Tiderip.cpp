@@ -17,7 +17,7 @@ ObjModule::ObjModule(VM *vm, const char *modName)
     this->name = nullptr;   // 核心模块名为NULL
     if (modName != nullptr)
     {
-        this->name = new ObjString(vm, modName, strlen(modName));
+        this->name = new ObjString(vm, modName, (uint32_t)strlen(modName));
     }
 }
 ObjModule *ObjModule::newObjModule(VM *vm, const char *modName)
@@ -37,7 +37,7 @@ ObjModule *ObjModule::newObjModule(VM *vm, const char *modName)
     objModule->name = nullptr;   // 核心模块名为NULL
     if (modName != nullptr)
     {
-        objModule->name = new ObjString(vm, modName, strlen(modName));
+        objModule->name = new ObjString(vm, modName, (uint32_t)strlen(modName));
     }
     
     return objModule;
@@ -50,7 +50,8 @@ ObjInstance::ObjInstance(VM *vm, Class *tarClass)
     uint32_t idx = 0;
     while (idx < tarClass->fieldNum)
     {
-        this->fields[idx++] = ((Value){ ValueType::VT_NULL, { 0 }});
+        Value field = { ValueType::VT_NULL, { 0 }};
+        this->fields[idx++] = field;
     }
 }
 ObjInstance *ObjInstance::newObjInstance(VM *vm, Class *tarClass)
@@ -64,7 +65,8 @@ ObjInstance *ObjInstance::newObjInstance(VM *vm, Class *tarClass)
     uint32_t idx = 0;
     while (idx < tarClass->fieldNum)
     {
-        objInstance->fields[idx++] = ((Value){ ValueType::VT_NULL, { 0 }});
+        Value field = { ValueType::VT_NULL, { 0 }};
+        objInstance->fields[idx++] = field;
     }
     return objInstance;
 }
