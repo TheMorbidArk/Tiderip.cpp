@@ -18,7 +18,9 @@ enum class MethodType
 };   //方法类型
 
 #define VT_TO_VALUE(vt) \
-   ((Value){vt, {0}})
+   VtToValue(vt)
+   
+Value VtToValue(ValueType vt);
 
 #define BOOL_TO_VALUE(boolean) (boolean ? VT_TO_VALUE(ValueType::VT_TRUE) : VT_TO_VALUE(ValueType::VT_FALSE))
 #define VALUE_TO_BOOL(value) ((value).type == VT_TRUE ? true : false)
@@ -28,10 +30,10 @@ enum class MethodType
 
 #define OBJ_TO_VALUE(objPtr)  \
    ObjToValue(objPtr)
-   
-   
+
 template<typename Type>
-Value ObjToValue(Type *objPtr){
+Value ObjToValue(Type *objPtr)
+{
     Value value;
     value.type = ValueType::VT_OBJ;
     value.objHeader = (headerObj *)(objPtr);
