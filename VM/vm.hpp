@@ -6,6 +6,16 @@
 
 #include "common.hpp"
 #include "Class.hpp"
+#include "ObjMap.hpp"
+#include "ObjThread.hpp"
+
+typedef enum vmResult
+{
+    VM_RESULT_SUCCESS,
+    VM_RESULT_ERROR
+} VMResult;   //虚拟机执行结果
+//如果执行无误,可以将字符码输出到文件缓存,避免下次重新编译
+
 
 class vm
 {
@@ -21,8 +31,11 @@ class vm
     Class *numClass;
     Class *fnClass;
     Class *threadClass;
+    ObjMap *allModules;
     uint32_t allocatedBytes;// 累计已分配的内存量
+    SymbolTable allMethodNames;    // (所有)类的方法名
     headerObj *allObjects;  // 所有已分配对象链表
+    ObjThread *curThread;   // 当前正在执行的线程2
     Parser *curParser;
     
     vm();

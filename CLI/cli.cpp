@@ -7,9 +7,9 @@
 #include <cstring>
 #include "cli.hpp"
 #include "utils.hpp"
-
 #include "vm.hpp"
 #include "parser.hpp"
+#include "core.hpp"
 
 using std::cin;
 using std::cout;
@@ -33,9 +33,11 @@ void Cli::runFile(const char *path)
         cli::rootDir = root;
     }
     
-    /* TODO <Cli::runFile> 读入文件,执行语句 executeModule() */
+    VM *vm = new VM();
     std::string sourceCode = readFile(path);
-    cout << sourceCode.c_str() << endl;
+    // cout << sourceCode.c_str() << endl;
+    executeModule(vm, OBJ_TO_VALUE(new ObjString(vm, path, strlen(path))), sourceCode.c_str());
+    
 }
 
 void Cli::runFileToken(const char *path)

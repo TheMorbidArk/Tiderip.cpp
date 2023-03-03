@@ -20,7 +20,7 @@ enum class mode
 
 int main()
 {
-    Cli::runFileToken("tst");
+    Cli::runFile("tst");
     return 0;
 }
 

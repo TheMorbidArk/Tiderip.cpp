@@ -121,33 +121,30 @@ int main(int argc, char* argv[]) {
 }
 ```
 
-| Interface (`usage_lines`)  | Code (content of `cli` parentheses )
-| -------------------------- | ------------------------------------
-| ` exe [-a] `               | ` option("-a", "--all").set(a)`
-| ` exe [--all] `            | ` option("--all", "-a", "--ALL").set(a)`
-| ` exe [-a] [-b] `          | ` option("-a").set(a), option("-b").set(b)`
-| ` exe -a `                 | ` required("-a").set(a)`
-| ` exe [-a] -b `            | ` option("-a").set(a), required("-b").set(b)`
-| ` exe [-n <times>] `       | ` option("-n", "--iter") & value("times", n) `
-| ` exe [-n [<times>]] `     | ` option("-n", "--iter") & opt_value("times", n) `
-| ` exe -n <times>  `        | ` required("-n", "--iter") & value("times", n) `
-| ` exe -n [<times>] `       | ` required("-n", "--iter") & opt_value("times", n) `
-| ` exe [-c <x> <y>]`        | ` option("-c") & value("x", x) & value("y", y)`
-| ` exe -c <x> <y> `         | ` required("-c") & value("x", x) & value("y", y)`
-| ` exe -c <x> [<y>] `       | ` required("-c") & value("x", x) & opt_value("y", y)`
-| ` exe [-l <lines>...] `    | ` option("-l") & values("lines", ids) `
-| ` exe [-l [<lines>...]] `  | ` option("-l") & opt_values("lines", ids) `
-| ` exe [-l <lines>]... `    | ` repeatable( option("-l") & value("lines", ids) ) `
-| ` exe -l <lines>... `      | ` required("-l") & values("lines", ids) `
-| ` exe -l [<lines>...] `    | ` required("-l") & opt_values("lines", ids) `
-| ` exe (-l <lines>)... `    | ` repeatable( required("-l") & value("lines", ids) ) `
-| ` exe fetch [-a] `         | ` command("fetch").set(k,1), option("-a").set(a) `
-| ` exe init \| fetch [-a] ` | ` command("init").set(k,0) \| (command("fetch").set(k,1), option("-a").set(a)) `
-| ` exe [-a\|-b]  `          | ` option("-a").set(a) \| option("-b").set(b) `
-| ` exe [-m a\|b] `          | ` option("-m") & (required("a").set(a) \| required("b").set(b)) `
-
-
-
+| Interface (`usage_lines`)      | Code (content of `cli` parentheses )                                                 |
+|--------------------------------|--------------------------------------------------------------------------------------|
+| ` exe [-a] `                   | ` option("-a", "--all").set(a)`                                                      |
+| ` exe [--all] `                | ` option("--all", "-a", "--ALL").set(a)`                                             |
+| ` exe [-a] [-b] `              | ` option("-a").set(a), option("-b").set(b)`                                          |
+| ` exe -a `                     | ` required("-a").set(a)`                                                             |
+| ` exe [-a] -b `                | ` option("-a").set(a), required("-b").set(b)`                                        |
+| ` exe [-n <times>] `           | ` option("-n", "--iter") & value("times", n) `                                       |
+| ` exe [-n [<times>]] `         | ` option("-n", "--iter") & opt_value("times", n) `                                   |
+| ` exe -n <times>  `            | ` required("-n", "--iter") & value("times", n) `                                     |
+| ` exe -n [<times>] `           | ` required("-n", "--iter") & opt_value("times", n) `                                 |
+| ` exe [-c <x> <y>]`            | ` option("-c") & value("x", x) & value("y", y)`                                      |
+| ` exe -c <x> <y> `             | ` required("-c") & value("x", x) & value("y", y)`                                    |
+| ` exe -c <x> [<y>] `           | ` required("-c") & value("x", x) & opt_value("y", y)`                                |
+| ` exe [-l <lines>...] `        | ` option("-l") & values("lines", ids) `                                              |
+| ` exe [-l [<lines>...]] `      | ` option("-l") & opt_values("lines", ids) `                                          |
+| ` exe [-l <lines>]... `        | ` repeatable( option("-l") & value("lines", ids) ) `                                 |
+| ` exe -l <lines>... `          | ` required("-l") & values("lines", ids) `                                            |
+| ` exe -l [<lines>...] `        | ` required("-l") & opt_values("lines", ids) `                                        |
+| ` exe (-l <lines>)... `        | ` repeatable( required("-l") & value("lines", ids) ) `                               |
+| ` exe fetch [-a] `             | ` command("fetch").set(k,1), option("-a").set(a) `                                   |
+| ` exe init &#124; fetch [-a] ` | ` command("init").set(k,0) &#124; (command("fetch").set(k,1), option("-a").set(a)) ` |
+| ` exe [-a&#124;-b]  `          | ` option("-a").set(a) &#124; option("-b").set(b) `                                   |
+| ` exe [-m a&#124;b] `          | ` option("-m") & (required("a").set(a) &#124; required("b").set(b)) `                |
 
 ## Overview
 

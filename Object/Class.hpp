@@ -19,11 +19,11 @@ enum class MethodType
 
 #define VT_TO_VALUE(vt) \
    VtToValue(vt)
-   
+
 Value VtToValue(ValueType vt);
 
 #define BOOL_TO_VALUE(boolean) (boolean ? VT_TO_VALUE(ValueType::VT_TRUE) : VT_TO_VALUE(ValueType::VT_FALSE))
-#define VALUE_TO_BOOL(value) ((value).type == VT_TRUE ? true : false)
+#define VALUE_TO_BOOL(value) ((value).type == ValueType::VT_TRUE ? true : false)
 
 #define NUM_TO_VALUE(num) ((Value){ValueType::VT_NUM, {num}})
 #define VALUE_TO_NUM(value) value.num
@@ -52,18 +52,18 @@ Value ObjToValue(Type *objPtr)
 #define VALUE_TO_OBJMODULE(value) ((ObjModule*)VALUE_TO_OBJ(value))
 #define VALUE_TO_CLASS(value) ((Class*)VALUE_TO_OBJ(value))
 
-#define VALUE_IS_UNDEFINED(value) ((value).type == VT_UNDEFINED)
-#define VALUE_IS_NULL(value) ((value).type == VT_NULL)
-#define VALUE_IS_TRUE(value) ((value).type == VT_TRUE)
-#define VALUE_IS_FALSE(value) ((value).type == VT_FALSE)
-#define VALUE_IS_NUM(value) ((value).type == VT_NUM)
-#define VALUE_IS_OBJ(value) ((value).type == VT_OBJ)
+#define VALUE_IS_UNDEFINED(value) ((value).type == ValueType::VT_UNDEFINED)
+#define VALUE_IS_NULL(value) ((value).type == ValueType::VT_NULL)
+#define VALUE_IS_TRUE(value) ((value).type == ValueType::VT_TRUE)
+#define VALUE_IS_FALSE(value) ((value).type == ValueType::VT_FALSE)
+#define VALUE_IS_NUM(value) ((value).type == ValueType::VT_NUM)
+#define VALUE_IS_OBJ(value) ((value).type == ValueType::VT_OBJ)
 #define VALUE_IS_CERTAIN_OBJ(value, objType) (VALUE_IS_OBJ(value) && VALUE_TO_OBJ(value)->type == objType)
-#define VALUE_IS_OBJSTR(value) (VALUE_IS_CERTAIN_OBJ(value, OT_STRING))
-#define VALUE_IS_OBJINSTANCE(value) (VALUE_IS_CERTAIN_OBJ(value, OT_INSTANCE))
-#define VALUE_IS_OBJCLOSURE(value) (VALUE_IS_CERTAIN_OBJ(value, OT_CLOSURE))
-#define VALUE_IS_OBJRANGE(value) (VALUE_IS_CERTAIN_OBJ(value, OT_RANGE))
-#define VALUE_IS_CLASS(value) (VALUE_IS_CERTAIN_OBJ(value, OT_CLASS))
+#define VALUE_IS_OBJSTR(value) (VALUE_IS_CERTAIN_OBJ(value, ObjType::OT_STRING))
+#define VALUE_IS_OBJINSTANCE(value) (VALUE_IS_CERTAIN_OBJ(value, ObjType::OT_INSTANCE))
+#define VALUE_IS_OBJCLOSURE(value) (VALUE_IS_CERTAIN_OBJ(value, ObjType::OT_CLOSURE))
+#define VALUE_IS_OBJRANGE(value) (VALUE_IS_CERTAIN_OBJ(value, ObjType::OT_RANGE))
+#define VALUE_IS_CLASS(value) (VALUE_IS_CERTAIN_OBJ(value, ObjType::OT_CLASS))
 #define VALUE_IS_0(value) (VALUE_IS_NUM(value) && (value).num == 0)
 
 // 原生方法指针
@@ -79,7 +79,7 @@ typedef struct
         Primitive primFn;
         
         //指向脚本代码编译后的ObjClosure或ObjFn
-        //ObjClosure* obj;
+        ObjClosure *obj;
     };
 } Method;
 
@@ -90,6 +90,7 @@ class Class
     Class *superClass; //父类
     uint32_t fieldNum;       //本类的字段数,包括基类的字段数
     Buffer<Method> methods;   //本类的方法
+    ObjString *name;   //类名
 };
 
 typedef union
