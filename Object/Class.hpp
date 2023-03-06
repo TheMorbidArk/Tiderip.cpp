@@ -86,11 +86,15 @@ typedef struct
 class Class
 {
   public:
-    headerObj objHeader;
+    headerObj *objHeader;
     Class *superClass; //父类
     uint32_t fieldNum;       //本类的字段数,包括基类的字段数
     Buffer<Method> methods;   //本类的方法
     ObjString *name;   //类名
+    
+    Class(VM *vm, const char *name, uint32_t fieldNum);
+    static Class *newRawClass(VM *vm, const char *name, uint32_t fieldNum);
+    static Class *getClassOfObj(VM *vm, Value object);
 };
 
 typedef union

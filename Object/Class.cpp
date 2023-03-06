@@ -3,8 +3,11 @@
 //
 
 #include "Class.hpp"
+#include "headerObj.hpp"
 #include "vm.hpp"
 #include "ObjRange.hpp"
+#include <cstring>
+
 Value VtToValue(ValueType vt)
 {
     Value value = {
@@ -60,4 +63,47 @@ bool valueIsEqual(Value a, Value b)
     }
     
     return false;  //其它对象不可比较
+}
+
+Class::Class(VM *vm, const char *name, uint32_t fieldNum)
+{
+    //裸类没有元类
+    this->objHeader = new headerObj(vm, ObjType::OT_CLASS, nullptr);
+    this->name = new ObjString(vm, name, strlen(name));
+    this->fieldNum = fieldNum;
+    this->superClass = nullptr;   //默认没有基类
+    Buffer<Method>::BufferInit(&this->methods);
+}
+
+Class *Class::newRawClass(VM *vm, const char *name, uint32_t fieldNum)
+{
+    Class *tarClass = ALLOCATE(vm, Class);
+    
+    //裸类没有元类
+    tarClass->objHeader = new headerObj(vm, ObjType::OT_CLASS, nullptr);
+    tarClass->name = new ObjString(vm, name, strlen(name));
+    tarClass->fieldNum = fieldNum;
+    tarClass->superClass = nullptr;   //默认没有基类
+    Buffer<Method>::BufferInit(&tarClass->methods);
+    
+    return tarClass;
+}
+
+Class *Class::getClassOfObj(VM *vm, Value object)
+{
+    switch (object.type)
+    {
+    case ValueType::VT_NULL:
+        return vm->nullClass;
+    case ValueType::VT_FALSE:
+    case ValueType::VT_TRUE:
+        return vm->boolClass;
+    case ValueType::VT_NUM:
+        return vm->numClass;
+    case ValueType::VT_OBJ:
+        return VALUE_TO_OBJ(object)->thisClass;
+    default:
+        NOT_REACHED()
+    }
+    return nullptr;
 }

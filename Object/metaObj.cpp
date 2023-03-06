@@ -5,6 +5,7 @@
 #include "metaObj.hpp"
 #include "vm.hpp"
 #include "Class.hpp"
+#include <cstring>
 
 ObjModule::ObjModule(VM *vm, const char *modName)
 {

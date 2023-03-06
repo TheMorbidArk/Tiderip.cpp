@@ -123,3 +123,11 @@ gen
 
 ### User Define
 /cmake-build-*
+/cmake-*
+
+## VisualStudio
+/.vs
+CMakeSettings.json
+
+/cmake-build-debug-wsl/
+/cmake-build-debug/
