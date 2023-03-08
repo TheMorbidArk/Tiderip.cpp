@@ -6,6 +6,7 @@
 
 #include "common.hpp"
 #include "vm.hpp"
+#include "Compiler.hpp"
 
 enum class TokenType : int
 {
@@ -107,6 +108,7 @@ class parser
     Token curToken;
     Token preToken;
     ObjModule *curModule;    //当前正在编译的模块
+    CompileUnit *curCompileUnit;   // 当前编译单元
     int interpolationExpectRightParenNum;       // 期望的右括号数量,用于跟踪小括号对儿的嵌套
     parser *parent;  //指向父parser
     VM *vm;

@@ -74,10 +74,33 @@ static uint32_t hashValue(Value value)
     return 0;
 }
 
+static uint32_t hashValue(Value value, ValueType type)
+{
+    switch (value.type)
+    {
+    case ValueType::VT_FALSE:
+        return 0;
+    case ValueType::VT_NULL:
+        return 1;
+    case ValueType::VT_NUM:
+        return hashNum(value.num);
+    case ValueType::VT_TRUE:
+        return 2;
+    case ValueType::VT_OBJ:
+        return hashObj(value.objHeader);
+    default:
+        RUN_ERROR("unsupport type hashed!");
+    }
+    return 0;
+}
+
 //在entries中添加entry,如果是新的key则返回true
 static bool addEntry(Entry *entries, uint32_t capacity, Value key, Value value)
 {
-    uint32_t index = hashValue(key) % capacity;
+    
+    ValueType a =  key.type;
+    
+    uint32_t index = hashValue(key, a) % capacity;
     
     //通过开放探测法去找可用的slot
     while (true)

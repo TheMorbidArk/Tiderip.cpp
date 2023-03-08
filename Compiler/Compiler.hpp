@@ -5,6 +5,7 @@
 #pragma once
 
 #include "ObjFn.hpp"
+#include "core.hpp"
 
 #define MAX_LOCAL_VAR_NUM 128
 #define MAX_UPVALUE_NUM 128
@@ -77,8 +78,9 @@ typedef struct
     Signature *signature;      //当前正在编译的签名
 } ClassBookKeep;    //用于记录类编译时的信息
 
-typedef struct compileUnit
+class CompileUnit
 {
+  public:
     // 所编译的函数
     ObjFn *fn;
     
@@ -104,11 +106,24 @@ typedef struct compileUnit
     ClassBookKeep *enclosingClassBK;
     
     //包含此编译单元的编译单元,即直接外层
-    struct compileUnit *enclosingUnit;
+    CompileUnit *enclosingUnit;
     
     //当前parser
     Parser *curParser;
-} CompileUnit;  //编译单元 ;
+    
+    CompileUnit(Parser *parser, CompileUnit *enclosingUnit, bool isMethod);
+    static void initCompileUnit(Parser *parser, CompileUnit *cu, CompileUnit *enclosingUnit, bool isMethod);
+};  //编译单元 ;
+
+namespace opCode
+{
+    static int writeByte(CompileUnit *cu, int byte);
+    static void writeOpCode(CompileUnit *cu, OpCode opCode);
+    static int writeByteOperand(CompileUnit *cu, int operand);
+    inline static void writeShortOperand(CompileUnit *cu, int operand);
+    static int writeOpCodeByteOperand(CompileUnit *cu, OpCode opCode, int operand);
+    static void writeOpCodeShortOperand(CompileUnit *cu, OpCode opCode, int operand);
+}
 
 int defineModuleVar(VM *vm, ObjModule *objModule, const char *name, uint32_t length, Value value);
 

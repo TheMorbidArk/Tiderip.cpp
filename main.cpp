@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include "cli.hpp"
-#include "clipp.h"
+#include "clipp/clipp.h"
 
 using std::cout;
 using std::endl;
@@ -18,9 +18,12 @@ enum class mode
     runFileMode, runCliMode, helpMode
 };
 
+#include "Compiler.hpp"
+
 int main()
 {
-    Cli::runFile("tst");
+    VM *vm = new class vm();
+    buildCore(vm);
     return 0;
 }
 

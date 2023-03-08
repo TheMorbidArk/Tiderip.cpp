@@ -6,6 +6,8 @@
 #include "core.hpp"
 #include "Compiler.hpp"
 
+#include "core.script.include"
+
 #define CORE_MODULE VT_TO_VALUE(ValueType::VT_NULL)
 
 //!object: object取反,结果为false
@@ -272,4 +274,8 @@ void buildCore(VM *vm)
         thisClass = vm->classOfClass;
     vm->classOfClass->objHeader->
         thisClass = vm->classOfClass; //元信息类回路,meta类终点
+    
+    //执行核心模块
+    executeModule(vm, CORE_MODULE, coreModuleCode);
+    
 }
