@@ -19,6 +19,40 @@
 
 #define MAX_FIELD_NUM 128
 
+typedef enum
+{
+    SIGN_CONSTRUCT,  //构造函数
+    SIGN_METHOD,  //普通方法
+    SIGN_GETTER, //getter方法
+    SIGN_SETTER, //setter方法
+    SIGN_SUBSCRIPT, //getter形式的下标
+    SIGN_SUBSCRIPT_SETTER   //setter形式的下标
+} SignatureType;   //方法的签名
+
+typedef enum
+{
+    BP_NONE,      //无绑定能力
+    
+    //从上往下,优先级越来越高
+    BP_LOWEST,    //最低绑定能力
+    BP_ASSIGN,    // =
+    BP_CONDITION,   // ?:
+    BP_LOGIC_OR,    // ||
+    BP_LOGIC_AND,   // &&
+    BP_EQUAL,      // == !=
+    BP_IS,        // is
+    BP_CMP,       // < > <= >=
+    BP_BIT_OR,    // |
+    BP_BIT_AND,   // &
+    BP_BIT_SHIFT, // << >>
+    BP_RANGE,       // ..
+    BP_TERM,      // + -
+    BP_FACTOR,      // * / %
+    BP_UNARY,    // - ! ~
+    BP_CALL,     // . () []
+    BP_HIGHEST
+} BindPower;   //定义了操作符的绑定权值,即优先级
+
 typedef struct
 {
     //如果此upvalue是直接外层函数的局部变量就置为true,
@@ -40,16 +74,6 @@ typedef struct
 //当其内层函数引用此变量时,由其内层函数来设置此项为true.
     bool isUpvalue;
 } LocalVar;    //局部变量
-
-typedef enum
-{
-    SIGN_CONSTRUCT,  //构造函数
-    SIGN_METHOD,  //普通方法
-    SIGN_GETTER, //getter方法
-    SIGN_SETTER, //setter方法
-    SIGN_SUBSCRIPT, //getter形式的下标
-    SIGN_SUBSCRIPT_SETTER   //setter形式的下标
-} SignatureType;   //方法的签名
 
 typedef struct
 {
@@ -115,6 +139,46 @@ class CompileUnit
     static void initCompileUnit(Parser *parser, CompileUnit *cu, CompileUnit *enclosingUnit, bool isMethod);
 };  //编译单元 ;
 
+//指示符函数指针
+typedef void (*DenotationFn)(CompileUnit *cu, bool canAssign);
+
+//签名函数指针
+typedef void (*methodSignatureFn)(CompileUnit *cu, Signature *signature);
+
+typedef struct
+{
+    const char *id;          //符号
+    
+    //左绑定权值,不关注左边操作数的符号此值为0
+    BindPower lbp;
+    
+    //字面量,变量,前缀运算符等不关注左操作数的Token调用的方法
+    DenotationFn nud;
+    
+    //中缀运算符等关注左操作数的Token调用的方法
+    DenotationFn led;
+    
+    //表示本符号在类中被视为一个方法,
+    //为其生成一个方法签名.
+    methodSignatureFn methodSign;
+} SymbolBindRule;   //符号绑定规则
+
+typedef enum
+{
+    VAR_SCOPE_INVALID,
+    VAR_SCOPE_LOCAL,    //局部变量
+    VAR_SCOPE_UPVALUE,  //upvalue
+    VAR_SCOPE_MODULE    //模块变量
+} VarScopeType;   //标识变量作用域
+
+typedef struct
+{
+    VarScopeType scopeType;   //变量的作用域
+    //根据scodeType的值,
+    //此索引可能指向局部变量或upvalue或模块变量
+    int index;
+} Variable;
+
 namespace opCode
 {
     static int writeByte(CompileUnit *cu, int byte);
@@ -125,6 +189,12 @@ namespace opCode
     static void writeOpCodeShortOperand(CompileUnit *cu, OpCode opCode, int operand);
 }
 
-int defineModuleVar(VM *vm, ObjModule *objModule, const char *name, uint32_t length, Value value);
+static void infixOperator(CompileUnit *cu, bool canAssign UNUSED);
+static void unaryOperator(CompileUnit *cu, bool canAssign UNUSED);
 
+int defineModuleVar(VM *vm, ObjModule *objModule, const char *name, uint32_t length, Value value);
 ObjFn *compileModule(VM *vm, ObjModule *objModule, const char *moduleCode);
+static uint32_t addConstant(CompileUnit *cu, Value constant);
+static void expression(CompileUnit *cu, BindPower rbp);
+static void compileStatment(CompileUnit *cu);
+static void compileProgram(CompileUnit *cu);

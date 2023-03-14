@@ -113,7 +113,7 @@ typedef char Char;
 typedef int Int;
 
 #define SymbolTable Buffer<String>
-
+void symbolTableClear(VM*, SymbolTable* buffer);
 typedef enum
 {
     ERROR_IO,

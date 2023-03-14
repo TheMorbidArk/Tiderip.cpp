@@ -40,6 +40,14 @@ uint32_t ceilToPowerOf2(uint32_t v)
     return v;
 }
 
+void symbolTableClear(VM* vm, SymbolTable* buffer) {
+    uint32_t idx = 0;
+    while (idx < buffer->count) {
+        memManager(vm, buffer->datas[idx++].str, 0, 0);
+    }
+    Buffer<String>::BufferClear(vm, buffer);
+}
+
 void errorReport(void *parser, ErrorType errorType, const char *fmt, ...)
 {
     char buffer[DEFAULT_BUfFER_SIZE] = { '\0' };

@@ -25,7 +25,21 @@ Value VtToValue(ValueType vt);
 #define BOOL_TO_VALUE(boolean) (boolean ? VT_TO_VALUE(ValueType::VT_TRUE) : VT_TO_VALUE(ValueType::VT_FALSE))
 #define VALUE_TO_BOOL(value) ((value).type == ValueType::VT_TRUE ? true : false)
 
-#define NUM_TO_VALUE(num) ((Value){ValueType::VT_NUM, {num}})
+#define NUM_TO_VALUE(num) NumToValue(num)
+
+template<typename Type>
+Value NumToValue(Type num)
+{
+    Value value = {
+        ValueType::VT_NUM,
+        {
+            (double)(num)
+        }
+    };
+    
+    return value;
+}
+
 #define VALUE_TO_NUM(value) value.num
 
 #define OBJ_TO_VALUE(objPtr)  \

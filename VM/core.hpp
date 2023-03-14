@@ -29,7 +29,7 @@
 #define SET_ERROR_FALSE(vmPtr, errMsg) \
    do {\
       vmPtr->curThread->errorObj = \
-	 OBJ_TO_VALUE(newObjString(vmPtr, errMsg, strlen(errMsg)));\
+     OBJ_TO_VALUE(newObjString(vmPtr, errMsg, strlen(errMsg)));\
       return false;\
    } while(0);
 
@@ -49,6 +49,7 @@
 VMResult executeModule(VM *vm, Value moduleName, const char *moduleCode);
 int getIndexFromSymbolTable(SymbolTable *table, const char *symbol, uint32_t length);
 int addSymbol(VM *vm, SymbolTable *table, const char *symbol, uint32_t length);
+int ensureSymbolExist(VM *vm, SymbolTable *table, const char *symbol, uint32_t length);
 void buildCore(VM *vm);
 void bindMethod(VM *vm, Class *tarClass, uint32_t index, Method method);
 void bindSuperClass(VM *vm, Class *subClass, Class *superClass);
