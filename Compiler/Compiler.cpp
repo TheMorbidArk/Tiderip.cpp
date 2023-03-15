@@ -2587,7 +2587,17 @@ static void compileImport(CompileUnit *cu)
 //编译程序
 static void compileProgram(CompileUnit *cu)
 {
-    return;
+    if (parser::matchToken(cu->curParser, TokenType::TOKEN_CLASS)) {
+        compileClassDefinition(cu);
+    } else if (parser::matchToken(cu->curParser, TokenType::TOKEN_FUN)) {
+        compileFunctionDefinition(cu);
+    } else if (parser::matchToken(cu->curParser, TokenType::TOKEN_TIDE)) {
+        compileVarDefinition(cu, cu->curParser->preToken.type == TokenType::TOKEN_STATIC);
+    } else if (parser::matchToken(cu->curParser, TokenType::TOKEN_IMPORT)) {
+        compileImport(cu);
+    } else {
+        compileStatment(cu);
+    }
 }
 
 //编译模块
