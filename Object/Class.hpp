@@ -106,4 +106,18 @@ class Class
     Buffer<Method> methods;   //本类的方法
     ObjString *name;   //类名
     
-    类名
+    Class(VM *vm, const char *name, uint32_t fieldNum);
+    static Class *newRawClass(VM *vm, const char *name, uint32_t fieldNum);
+    static Class *getClassOfObj(VM *vm, Value object);
+};
+
+typedef union
+{
+    uint64_t bits64;
+    uint32_t bits32[2];
+    double num;
+} Bits64;
+
+#define CAPACITY_GROW_FACTOR 4
+#define MIN_CAPACITY 64
+bool valueIsEqual(Value a, Value b);

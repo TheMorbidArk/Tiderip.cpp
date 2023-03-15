@@ -8,7 +8,7 @@
 #include "vm.hpp"
 #include "Compiler.hpp"
 
-enum class ./                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                TokenType : int
+enum class TokenType : int
 {
     TOKEN_UNKNOWN = 0,
     // 数据类型
