@@ -189,6 +189,7 @@ namespace opCode
     static void writeOpCodeShortOperand(CompileUnit *cu, OpCode opCode, int operand);
 }
 
+uint32_t getBytesOfOperands(Byte *instrStream, Value *constants, int ip);
 static void infixOperator(CompileUnit *cu, bool canAssign UNUSED);
 static void unaryOperator(CompileUnit *cu, bool canAssign UNUSED);
 

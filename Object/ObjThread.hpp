@@ -23,7 +23,7 @@ class ObjThread
     ObjUpvalue *openUpvalues;
     
     //当前thread的调用者
-    struct objThread *caller;
+    ObjThread *caller;
     
     //导致运行时错误的对象会放在此处,否则为空
     Value errorObj;

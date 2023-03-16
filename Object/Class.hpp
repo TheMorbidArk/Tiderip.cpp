@@ -106,7 +106,8 @@ class Class
     Buffer<Method> methods;   //本类的方法
     ObjString *name;   //类名
     
-    Class(VM *vm, const char *name, uint32_t fieldNum);
+    Class(VM *vm, const char *name, uint32_t fieldNum); // 裸类
+    Class(VM *vm, ObjString *className, uint32_t fieldNum, Class *superClass);
     static Class *newRawClass(VM *vm, const char *name, uint32_t fieldNum);
     static Class *getClassOfObj(VM *vm, Value object);
 };

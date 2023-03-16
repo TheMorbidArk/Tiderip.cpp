@@ -6,6 +6,8 @@
 #include "headerObj.hpp"
 #include "vm.hpp"
 #include "ObjRange.hpp"
+#include "core.hpp"
+#include "Compiler.hpp"
 #include <cstring>
 
 Value VtToValue(ValueType vt)
@@ -73,6 +75,37 @@ Class::Class(VM *vm, const char *name, uint32_t fieldNum)
     this->fieldNum = fieldNum;
     this->superClass = nullptr;   //默认没有基类
     Buffer<Method>::BufferInit(&this->methods);
+}
+
+Class::Class(VM *vm, ObjString *className, uint32_t fieldNum, Class *superClass)
+{
+    //10表示strlen(" metaClass"
+    #define MAX_METACLASS_LEN (int)(MAX_ID_LEN + 10)
+    char newClassName[MAX_METACLASS_LEN] = { '\0' };
+    #undef MAX_METACLASS_LEN
+    
+    memcpy(newClassName, className->value.start, className->value.length);
+    memcpy(newClassName + className->value.length, " metaclass", 10);
+    
+    //先创建子类的meta类
+    Class *metaclass = newRawClass(vm, newClassName, 0);
+    metaclass->objHeader->thisClass = vm->classOfClass;
+    
+    //绑定classOfClass为meta类的基类
+    //所有类的meta类的基类都是classOfClass
+    bindSuperClass(vm, metaclass, vm->classOfClass);
+    
+    //最后再创建类
+    memcpy(newClassName, className->value.start, className->value.length);
+    newClassName[className->value.length] = '\0';
+    
+    this->objHeader = new headerObj(vm, ObjType::OT_CLASS, nullptr);
+    this->name = new ObjString(vm, newClassName, strlen(newClassName));
+    this->fieldNum = fieldNum;
+    this->superClass = nullptr;   //默认没有基类
+    Buffer<Method>::BufferInit(&this->methods);
+    this->objHeader->thisClass = metaclass;
+    bindSuperClass(vm, this, superClass);
 }
 
 Class *Class::newRawClass(VM *vm, const char *name, uint32_t fieldNum)
