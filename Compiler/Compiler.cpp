@@ -123,7 +123,7 @@ static int opCode::writeByte(CompileUnit *cu, int byte)
      &cu->fn->debug->lineNo, cu->curParser->preToken.lineNo);
 #endif
     Buffer<Byte>::BufferAdd(cu->curParser->vm,
-        &cu->fn->instrStream, (uint8_t)byte);
+        &cu->fn->instrStream, byte);
     return (int)(cu->fn->instrStream.count - 1);
 }
 

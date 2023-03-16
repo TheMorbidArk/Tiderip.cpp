@@ -156,7 +156,7 @@ static ObjThread *loadModule(VM *vm, Value moduleName, const char *moduleCode)
 VMResult executeModule(VM *vm, Value moduleName, const char *moduleCode)
 {
     ObjThread *objThread = loadModule(vm, moduleName, moduleCode);
-    return VM_RESULT_ERROR;
+    return executeInstruction(vm, objThread);
 }
 
 //table中查找符号symbol 找到后返回索引,否则返回-1
